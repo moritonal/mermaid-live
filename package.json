@@ -1,7 +1,7 @@
 {
   "name": "mermaid-live",
   "version": "1.2.0",
-  "description": "",
+  "description": "Live editor for the mermaid diagramming engine",
   "main": "index.js",
   "dependencies": {
     "mermaid": "^8.8.2",
@@ -32,7 +32,7 @@
     "deploy:build": "npm run build",
     "deploy:deploy": "gh-pages -d dist --dotfiles"
   },
-  "keywords": [],
-  "author": "",
-  "license": "closed"
+  "keywords": ["mermaid"],
+  "author": "Tom Bonner",
+  "license": "MIT"
 }
