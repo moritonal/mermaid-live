@@ -13,18 +13,3 @@ jobs:
 
       - name: config
         run: git config --list
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2.1.2
-        with:
-          check-latest: true
-      
-      - name: npm install
-        run: npm install
-        
-      - name: npm run deploy
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git config --global credential.helper wincred
-          npm run deploy
