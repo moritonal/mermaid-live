@@ -1,15 +1,14 @@
 <template>
 	<div id="root" class="root" ref="root">
+
+		<!-- Left hand side -->
 		<div class="monaco" ref="monaco">
-			<div
-				id="editor_container"
-				ref="editor_container"
-				class="vs-dark editor_container"
-			>
+			<div id="editor_container" ref="editor_container" class="vs-dark editor_container">
 				<div id="editor" ref="editor" class="editor"></div>
 			</div>
 		</div>
 
+		<!-- Right hand side -->
 		<div class="mermaid" ref="mermaid"></div>
 	</div>
 </template>
