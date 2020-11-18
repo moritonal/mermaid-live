@@ -1,7 +1,9 @@
 # mermaid-live
- Live editor for the mermaid library
+Live editor for the mermaid library
 
 To go: 
 
-`node install`
-`npm run build`
+```bash
+npm install
+npm run build
+```
