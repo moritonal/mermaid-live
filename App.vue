@@ -1,9 +1,12 @@
 <template>
 	<div id="root" class="root" ref="root">
-
 		<!-- Left hand side -->
 		<div class="monaco" ref="monaco">
-			<div id="editor_container" ref="editor_container" class="vs-dark editor_container">
+			<div
+				id="editor_container"
+				ref="editor_container"
+				class="vs-dark editor_container"
+			>
 				<div id="editor" ref="editor" class="editor"></div>
 			</div>
 		</div>
@@ -84,13 +87,17 @@
 				wordWrap: "off",
 			} as monaco.editor.IEditorConstructionOptions;
 
-			var content = [
-				"sequenceDiagram",
-				"	Alice->>+John: Hello John, how are you?",
-				"	Alice->>+John: John, can you hear me?",
-				"	John-->>-Alice: Hi Alice, I can hear you!",
-				"	John-->>-Alice: I feel great!",
-			].join("\r\n");
+			var content = localStorage.getItem("mermaid_content");
+
+			if (content == null) {
+				content = [
+					"sequenceDiagram",
+					"	Alice->>+John: Hello John, how are you?",
+					"	Alice->>+John: John, can you hear me?",
+					"	John-->>-Alice: Hi Alice, I can hear you!",
+					"	John-->>-Alice: I feel great!",
+				].join("\r\n");
+			}
 
 			options.value = content;
 
@@ -106,6 +113,7 @@
 
 				try {
 					mermaid.parse(value);
+					localStorage.setItem("mermaid_content", value);
 
 					mermaid.render("mermaid", value, (svgCode) => {
 						elem.innerHTML = svgCode;
@@ -170,7 +178,7 @@
 	}
 	.monaco {
 		//height: 600px;
-		width: 800px;
+		width: 1600px;
 	}
 	.mermaid {
 		width: 100%;
