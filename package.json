@@ -23,7 +23,7 @@
     "vue-template-compiler": "^2.6.12"
   },
   "scripts": {
-    "serve": "npm-run-all build:monaco:* && parcel index.html",
+    "serve": "npm-run-all build:monaco && parcel index.html",
     "build": "npm-run-all build:*",
     "build:trash": "trash ./dist",
     "build:monaco": "parcel build ./node_modules/monaco-editor/esm/vs/editor/editor.worker.js --no-source-maps --log-level 1",
