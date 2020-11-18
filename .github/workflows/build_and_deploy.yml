@@ -11,7 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: git config --list
+      - name: config
+        run: git config --list
 
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.2
