@@ -20,4 +20,7 @@ jobs:
         run: npm install
         
       - name: Deploy
-        run: npm run deploy
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          npm run deploy
