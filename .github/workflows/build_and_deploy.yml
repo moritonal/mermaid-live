@@ -16,12 +16,16 @@ jobs:
         with:
           check-latest: true
       
-      - name: npm install
+      - name: npm install 🏗
         run: npm install
-        
-      - name: npm run deploy
-        run: |
-          git config --list
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          npm run deploy
+      
+      - name: npm build 🏭
+        run: npm build
+
+      - name: npm deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: dist
+          CLEAN: true
