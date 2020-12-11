@@ -12,15 +12,9 @@
 <script lang="ts">
 	import Vue from "vue";
 
-	import Resizer from "resizerjs";
-
-	interface IData {
-		editor: monaco.editor.IStandaloneCodeEditor;
-	}
-
 	export default Vue.extend({
-		data: function (): IData {
-			return <IData>{
+		data: function () {
+			return {
 				editor: null,
 				diagram_content: String,
 				config_content: String,
@@ -31,20 +25,13 @@
 			};
 		},
 		components: {
-			Monaco: () => import("./Monaco.vue")
+			Monaco: async () => await import("./Monaco.vue")
 		},
 		methods:{
-			configContent: async function(newContent) {
-
-			},
-			content: async function(newContent) {
+			content: async function(newContent : string) {
 
 				var mermaid = await import("mermaid");
 				
-				// var monaco = this.$refs.diagram;
-
-				// console.log("New Content", newContent);
-				 
 				try {
 					
 					mermaid.parse(newContent);
@@ -78,6 +65,9 @@
 			}
 		},
 		mounted: async function () {
+
+			// import Resizer from "resizerjs";
+			const Resizer = (await import("resizerjs")).default;
 
 			// Setup resizer
 			const myResizer = new Resizer("#root");
