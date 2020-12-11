@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.2.0",
+    "emoji-to-icon": "git+https://github.com/moritonal/emoji-to-icon.git",
     "gh-pages": "^3.1.0",
     "sass": "^1.27.0",
     "trash-cli": "^3.1.0",
@@ -24,10 +25,10 @@
   },
   "scripts": {
     "serve": "npm-run-all start",
-    "start": "npm-run-all build:monaco && parcel index.html",
-    "build": "npm-run-all build:*",
-    "build:trash": "trash ./dist",
-    "build:monaco": "parcel build ./node_modules/monaco-editor/esm/vs/editor/editor.worker.js --no-source-maps --log-level 1",
+    "start": "npm-run-all build:assets:* && parcel index.html --hmr-port 1235",
+    "build": "npm-run-all build:**",
+    "build:assets:icons": "emoji-to-icon --emoji 🐳 --size 48 --size 72 --size 96 --size 144 --size 168 --size 192 --padding '12%' --outDir ./icons",
+    "build:assets:monaco": "parcel build ./node_modules/monaco-editor/esm/vs/editor/editor.worker.js --no-source-maps --log-level 1",
     "build:parcel": "parcel build index.html --public-url . --no-source-maps",
     "deploy": "npm-run-all deploy:*",
     "deploy:bump": "npm version minor",
