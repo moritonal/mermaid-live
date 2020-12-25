@@ -1,16 +1,9 @@
 <template>
 	<div id="root" class="root" ref="root">
 		<!-- Left hand side -->
-		<div class="monaco" ref="monaco">
-			<div
-				id="editor_container"
-				ref="editor_container"
-				class="vs-dark editor_container"
-			>
-				<div id="editor" ref="editor" class="editor"></div>
-			</div>
+		<div class="monaco">
+			<Monaco ref="diagram" v-bind:content="diagram_content" v-on:content="content" v-bind:markers="markers" v-bind:width="width">
 		</div>
-
 		<!-- Right hand side -->
 		<div class="mermaid" ref="mermaid"></div>
 	</div>
@@ -19,139 +12,68 @@
 <script lang="ts">
 	import Vue from "vue";
 
-	import "monaco-editor/esm/vs/editor/browser/controller/coreCommands.js";
-	import "monaco-editor/esm/vs/editor/contrib/find/findController.js";
-	import "monaco-editor/esm/vs/editor/editor.api.js";
-	import * as monaco from "monaco-editor";
-
-	import Resizer from "resizerjs";
-
-	monaco.languages.register({ id: "mermaid" });
-
-	// Register a tokens provider for the language
-	monaco.languages.setMonarchTokensProvider("mermaid", {
-		tokenizer: {
-			root: [
-				[/\[graph.*/, "custom-error"],
-				[/\[notice.*/, "custom-notice"],
-				[/\[info.*/, "custom-info"],
-				[/\[[a-zA-Z 0-9:]+\]/, "custom-date"],
-			],
-		},
-	});
-
-	self.MonacoEnvironment = {
-		getWorkerUrl: function (moduleId, label) {
-			console.log(`Worker: ${label}`);
-
-			if (label === "json") {
-				return "./json.worker.js";
-			}
-			if (label === "css") {
-				return "./css.worker.js";
-			}
-			if (label === "html") {
-				return "./html.worker.js";
-			}
-			if (label === "typescript" || label === "javascript") {
-				return "./ts.worker.js";
-			}
-			return "./editor.worker.js";
-		},
-	};
-
-	interface IData {
-		editor: monaco.editor.IStandaloneCodeEditor;
-	}
-
 	export default Vue.extend({
-		data: function (): IData {
-			return <IData>{
+		data: function () {
+			return {
 				editor: null,
+				diagram_content: String,
+				config_content: String,
 				left: String,
 				right: String,
+				markers: Array,
+				width: Number
 			};
 		},
-		mounted: async function () {
-			console.log("Creating monaco!");
+		components: {
+			Monaco: async () => await import("./Monaco.vue")
+		},
+		methods:{
+			content: async function(newContent : string) {
 
-			let element = this.$refs.editor;
-
-			console.log(element);
-
-			let options = {
-				language: "mermaid",
-				theme: "vs-dark",
-				readOnly: false,
-				automaticLayout: true,
-				wordWrap: "off",
-			} as monaco.editor.IEditorConstructionOptions;
-
-			var content = localStorage.getItem("mermaid_content");
-
-			if (content == null) {
-				content = [
-					"sequenceDiagram",
-					"	Alice->>+John: Hello John, how are you?",
-					"	Alice->>+John: John, can you hear me?",
-					"	John-->>-Alice: Hi Alice, I can hear you!",
-					"	John-->>-Alice: I feel great!",
-				].join("\r\n");
-			}
-
-			options.value = content;
-
-			var editor = monaco.editor.create(
-				element,
-				options
-			) as monaco.editor.IStandaloneCodeEditor;
-
-			this.editor = editor;
-
-			this.editor.onDidChangeModelContent((event) => {
-				var value = this.editor.getValue();
-
+				var mermaid = await import("mermaid");
+				
 				try {
-					mermaid.parse(value);
-					localStorage.setItem("mermaid_content", value);
+					
+					mermaid.parse(newContent);
 
-					mermaid.render("mermaid", value, (svgCode) => {
+					localStorage.setItem("mermaid_content", newContent);
+
+					var elem = this.$refs["mermaid"];
+
+					console.log("Rendering", newContent);
+
+					mermaid.render("mermaid", newContent, (svgCode) => {
 						elem.innerHTML = svgCode;
 					});
 
-					monaco.editor.setModelMarkers(editor.getModel(), "owner", []);
-				} catch (ex) {
-					console.warn(ex);
+					this.markers = [];
 
-					monaco.editor.setModelMarkers(editor.getModel(), "owner", [
+				} catch (ex) {
+
+					console.log("Error", ex);
+
+					this.markers = [
 						{
 							startLineNumber: ex.hash.loc.first_line,
 							startColumn: ex.hash.loc.first_column,
 							endLineNumber: ex.hash.loc.last_column,
 							endColumn: ex.hash.loc.last_column,
 							message: ex.str,
-							severity: monaco.MarkerSeverity.Error,
-						},
-					]);
+						}
+					];
 				}
-			});
+			}
+		},
+		mounted: async function () {
 
-			var mermaid = await import("mermaid");
+			// import Resizer from "resizerjs";
+			const Resizer = (await import("resizerjs")).default;
 
-			var elem = this.$refs["mermaid"];
-
-			setTimeout(() => {
-				mermaid.render("mermaid", content, (svgCode) => {
-					elem.innerHTML = svgCode;
-				});
-			}, 500);
-
-			editor.layout();
-
+			// Setup resizer
 			const myResizer = new Resizer("#root");
 
 			myResizer.on("resize", (c) => {
-				editor.layout({ width: c.handleX, height: null });
+				this.width = c.handleX;
 			});
 		},
 	});
@@ -176,12 +98,25 @@
 		width: 100%;
 		height: 100vh;
 	}
+	.diagram {
+		// height: 80%;
+	}
+	.config {
+		height: 20%;
+	}
 	.monaco {
 		//height: 600px;
 		width: 1600px;
+		height:100%;
 	}
 	.mermaid {
 		width: 100%;
+	}
+	.h-80 {
+		height: 80%;
+	}
+	.h-20 {
+		height: 20%;
 	}
 </style>
 
