@@ -28,9 +28,9 @@
 			Monaco: async () => await import("./Monaco.vue")
 		},
 		methods:{
-			content: async function(newContent : string) {
+			content: async function(newContent : String) {
 
-				var mermaid = await import("mermaid");
+				let mermaid = await import("mermaid");
 				
 				try {
 					
@@ -38,11 +38,11 @@
 
 					localStorage.setItem("mermaid_content", newContent);
 
-					var elem = this.$refs["mermaid"];
+					let elem = this.$refs["mermaid"];
 
 					console.log("Rendering", newContent);
 
-					mermaid.render("mermaid", newContent, (svgCode) => {
+					mermaid.render("mermaid", newContent, (svgCode: String) => {
 						elem.innerHTML = svgCode;
 					});
 
@@ -72,7 +72,7 @@
 			// Setup resizer
 			const myResizer = new Resizer("#root");
 
-			myResizer.on("resize", (c) => {
+			myResizer.on("resize", (c: any) => {
 				this.width = c.handleX;
 			});
 		},
@@ -97,9 +97,6 @@
 		flex-direction: row;
 		width: 100%;
 		height: 100vh;
-	}
-	.diagram {
-		// height: 80%;
 	}
 	.config {
 		height: 20%;
