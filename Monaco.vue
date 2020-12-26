@@ -34,7 +34,7 @@
 	});
 
 	self.MonacoEnvironment = {
-		getWorkerUrl: function (moduleId, label) {
+		getWorkerUrl: function (moduleId: any, label: String) {
 			console.log(`Worker: ${label}`);
 
 			if (label === "json") {
@@ -104,7 +104,7 @@
 				wordWrap: "off",
 			} as monaco.editor.IEditorConstructionOptions;
 
-			var content = localStorage.getItem("mermaid_content");
+			let content = localStorage.getItem("mermaid_content");
 
 			if (content == null) {
 				content = [
@@ -118,14 +118,14 @@
 
 			options.value = content;
 
-			var editor = monaco.editor.create(
+			let editor = monaco.editor.create(
 				element,
 				options
 			) as monaco.editor.IStandaloneCodeEditor;
 
 			this.editor = editor;
 
-			this.editor.onDidChangeModelContent((event) => {
+			this.editor.onDidChangeModelContent((event: KeyboardEvent) => {
 				this.$emit("content", this.editor.getValue());
 			});
 
