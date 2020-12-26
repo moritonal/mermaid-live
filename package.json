@@ -12,17 +12,16 @@
     "resizable": "^1.2.1",
     "resizerjs": "git+https://github.com/moritonal/resizerjs.git",
     "vue": "^2.6.12",
-    "vue-hot-reload-api": "^2.3.4"
-  },
-  "devDependencies": {
-    "@vue/component-compiler-utils": "^3.2.0",
+    "vue-hot-reload-api": "^2.3.4",
     "emoji-to-icon": "git+https://github.com/moritonal/emoji-to-icon.git",
+    "@vue/component-compiler-utils": "^3.2.0",
     "gh-pages": "^3.1.0",
     "sass": "^1.27.0",
     "trash-cli": "^3.1.0",
     "typescript": "^4.0.3",
     "vue-template-compiler": "^2.6.12"
   },
+  "devDependencies": {},
   "scripts": {
     "serve": "npm-run-all start",
     "start": "npm-run-all build:assets:* && parcel index.html --hmr-port 1235",
