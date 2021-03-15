@@ -1,8 +1,8 @@
 <template>
-	<div id="root" class="root" ref="root">
+	<div id="root" v-bind:class="rootClases" ref="root">
 		<!-- Left hand side -->
-		<div class="monaco">
-			<Monaco ref="diagram" v-bind:content="diagram_content" v-on:content="content" v-bind:markers="markers" v-bind:width="width">
+		<div v-bind:class="monacoClasses" ref="monaco">
+			<Monaco ref="diagram"  v-bind:content="diagram_content" v-on:content="content" v-bind:markers="markers" v-bind:height="height" v-bind:width="width">
 		</div>
 		<!-- Right hand side -->
 		<div class="mermaid" ref="mermaid"></div>
@@ -21,16 +21,59 @@
 				left: String,
 				right: String,
 				markers: Array,
-				width: Number
+				width: Number,
+				height: Number,
+				screenMode: "vertical"
 			};
 		},
 		components: {
 			Monaco: async () => await import("./Monaco.vue")
 		},
+		computed:{
+			rootClases: function() {
+				switch (this.screenMode) {
+					case "vertical":
+						return {
+							root: true, 
+							'flex-direction-row': true,
+							'flex-direction-column': false,
+							'v-height-100': true
+						}
+					case "horizontal":
+						return {
+							root: true, 
+							'flex-direction-row': false,
+							'flex-direction-column': true,
+							'v-height-100': true
+						}
+				}
+			},
+			monacoClasses: function() {
+				switch (this.screenMode) {
+					case "vertical":
+						return {
+							monaco: true,
+							'h-100': true
+						};
+					case "horizontal":
+						return {
+							monaco: true,
+							'h-20': true
+						};
+				}
+			}
+		},
 		methods:{
-			content: async function(newContent : String) {
+			content: async function(newContent : string) {
 
-				let mermaid = await import("mermaid");
+				if (newContent.startsWith("gantt")) {
+					this.screenMode = "horizontal";
+					this.$refs["monaco"].style.width = "100vw";
+				} else {
+					this.screenMode = "vertical";
+				}
+
+				let mermaid : Mermaid = await import("mermaid");
 				
 				try {
 					
@@ -75,6 +118,8 @@
 			myResizer.on("resize", (c: any) => {
 				this.width = c.handleX;
 			});
+
+			this.$refs["monaco"].style.width = "1600px";
 		},
 	});
 </script>
@@ -94,20 +139,32 @@
 	}
 	.root {
 		display: flex;
-		flex-direction: row;
 		width: 100%;
+	}
+	.v-height-100 {
 		height: 100vh;
+	}
+	.v-height-30 {
+		height: 30;
+	}
+	.flex-direction-row {
+		flex-direction: row;
+	}
+	.flex-direction-column {
+		flex-direction: column;
 	}
 	.config {
 		height: 20%;
 	}
 	.monaco {
-		//height: 600px;
-		width: 1600px;
+		//width: 1600px;
 		height:100%;
 	}
 	.mermaid {
 		width: 100%;
+	}
+	.h-100 {
+		height: 100%;
 	}
 	.h-80 {
 		height: 80%;

@@ -17,8 +17,6 @@
 	import "monaco-editor/esm/vs/editor/editor.api.js";
 	import * as monaco from "monaco-editor";
 
-	import Resizer from "resizerjs";
-
 	monaco.languages.register({ id: "mermaid" });
 
 	// Register a tokens provider for the language
@@ -72,20 +70,18 @@
 			"content", "markers", "width", "height"
 		],
 		watch: {
-			markers: function(newVal, oldVal) {
+			markers: function(newVal) {
 				
 				newVal.severity = monaco.MarkerSeverity.Error;
 
 				monaco.editor.setModelMarkers(this.editor.getModel(), "owner", newVal);	
-			}, 
-			/*height: function(newVal, oldVal) {
-
-				this._height = newVal;
-				this.editor.layout({ width: this._width, height: this._height });
-			},*/ 
-			width: function(newVal, oldVal) {
-
+			},
+			width: function(newVal : number) {
 				this._width = newVal;
+				this.editor.layout({ width: this._width, height: this._height });
+			},
+			height: function(newVal : number) {
+				this._height = newVal;
 				this.editor.layout({ width: this._width, height: this._height });
 			}
 		},
@@ -164,7 +160,7 @@
 	}
 	.monaco {
 		//height: 600px;
-		width: 1600px;
+		//width: 1600px;
 	}
 </style>
 
