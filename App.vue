@@ -71,6 +71,7 @@
 					this.$refs["monaco"].style.width = "100vw";
 				} else {
 					this.screenMode = "vertical";
+					this.$refs["monaco"].style.width = "50vw";
 				}
 
 				let mermaid : Mermaid = await import("mermaid");
@@ -118,8 +119,6 @@
 			myResizer.on("resize", (c: any) => {
 				this.width = c.handleX;
 			});
-
-			this.$refs["monaco"].style.width = "1600px";
 		},
 	});
 </script>
