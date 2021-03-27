@@ -12,6 +12,8 @@ FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
 # ARG EXTRA_NODE_VERSION=10
 # RUN su node -c "source /usr/local/share/nvm/nvm.sh && nvm install ${EXTRA_NODE_VERSION}"
 
+RUN apt-get update && apt-get install libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg62-turbo-dev libgif-dev -y
+
 RUN sudo -u node npm install -g npm-check-updates
 
 RUN sudo -u node npm install -g npm
