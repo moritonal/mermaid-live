@@ -55,6 +55,12 @@
 		editor: monaco.editor.IStandaloneCodeEditor;
 	}
 
+	interface IEditorConstructionOptions extends monaco.editor.IEditorConstructionOptions {
+		language: string,
+		theme: string,
+		value?: string
+	}
+
 	export default Vue.extend({
 		data: function (): IData {
 			return <IData>{
@@ -92,15 +98,15 @@
 
 			console.log("Monaco", this, element);
 
-			let options = {
+			let options: IEditorConstructionOptions = {
 				language: "mermaid",
 				theme: "vs-dark",
 				readOnly: false,
 				automaticLayout: true,
 				wordWrap: "off",
-			} as monaco.editor.IEditorConstructionOptions;
+			}
 
-			let content = localStorage.getItem("mermaid_content");
+			let content: string | null = localStorage.getItem("mermaid_content");
 
 			if (content == null) {
 				content = [
@@ -114,10 +120,10 @@
 
 			options.value = content;
 
-			let editor = monaco.editor.create(
+			let editor: monaco.editor.IStandaloneCodeEditor = monaco.editor.create(
 				element,
 				options
-			) as monaco.editor.IStandaloneCodeEditor;
+			);
 
 			this.editor = editor;
 
