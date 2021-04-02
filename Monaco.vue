@@ -91,7 +91,7 @@
 				this.editor.layout({ width: this._width, height: this._height });
 			}
 		},
-		mounted: async function () {
+		mounted: async function (): Promise<void> {
 			console.log("Creating monaco!");
 
 			let element = this.$refs.editor;
@@ -127,7 +127,7 @@
 
 			this.editor = editor;
 
-			this.editor.onDidChangeModelContent((event: KeyboardEvent) => {
+			this.editor.onDidChangeModelContent((): void => {
 				this.$emit("content", this.editor.getValue());
 			});
 
